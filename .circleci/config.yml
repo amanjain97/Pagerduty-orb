@@ -37,12 +37,10 @@ workflows:
         requires: [orb-tools/lint]
 
     - orb-tools/publish-dev:
-        context: orb-publishing
         orb-name: amanjain97/pagerduty
         requires: [orb-tools/pack]
 
     - orb-tools/trigger-integration-workflow:
-        context: orb-publishing
         name: trigger-integration-dev
         cleanup-tags: true
         requires: [orb-tools/publish-dev]
