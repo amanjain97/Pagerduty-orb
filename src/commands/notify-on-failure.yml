@@ -130,16 +130,20 @@ steps:
                     \"id\": \"<< parameters.service >>\", \
                     \"type\": \"service_reference\" \
                   }, \
+                  <<# parameters.policy >>
                   \"priority\": { \
                     \"id\": \"<< parameters.priority >>\",
                     \"type\": \"priority_reference\" \
                   }, \
+                  <</ parameters.policy >>
                   \"urgency\": \"<< parameters.urgency >>\", \
                   \"incident_key\": \"<< parameters.incident_key >>\", \
+                  <<# parameters.escalation_policy >>
                   \"escalation_policy\": { \
                     \"id\": \"<< parameters.escalation_policy >>\", \
                     \"type\": \"escalation_policy_reference\" \
                   }, \
+                  <</ parameters.escalation_policy >>
                   \"body\": { \
                     \"type\": \"incident_body\", \
                     \"details\": \"<< parameters.incident_description >>\" \
