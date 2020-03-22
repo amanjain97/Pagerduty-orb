@@ -137,7 +137,9 @@ steps:
                   }, \
                   <</ parameters.priority >>
                   \"urgency\": \"<< parameters.urgency >>\", \
+                  <<# parameters.incident_key >>
                   \"incident_key\": \"<< parameters.incident_key >>\", \
+                  <</ parameters.incident_key >>
                   <<# parameters.escalation_policy >>
                   \"escalation_policy\": { \
                     \"id\": \"<< parameters.escalation_policy >>\", \
