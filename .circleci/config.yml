@@ -1,0 +1,18 @@
+version: 2.1
+
+orbs:
+  orb-tools: circleci/orb-tools@8.27.3
+  pagerduty: amanjain97/pagerduty@dev:alpha
+
+jobs:
+  notifytest:
+    executor: orb-tools/ubuntu
+    steps:
+    - run: exit 1 #toggle this to force success or status for testing
+    - pagerduty/notify-on-failure:
+        apitoken: "default"
+
+workflows:
+  test_pagerduty:
+    jobs:
+      - notifytest

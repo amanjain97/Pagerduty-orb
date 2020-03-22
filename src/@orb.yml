@@ -1,0 +1,12 @@
+version: 2.1
+
+description: >
+  Easily integrate custom PagerDuty notifications into your CircleCI projects.
+  Create custom alert incidents for any job failure or success.
+  View this orb's source: https://github.com/amanjain97/Pagerduty-orb
+
+# Create your key here: https://api.slack.com/incoming-webhooks
+
+## Requirements ##
+## - Bash
+## - cURL

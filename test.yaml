@@ -1,0 +1,177 @@
+description: >
+  Send a PagerDuty alert at the end of a job based on success or failure.
+  Must be the last step in a job.
+
+parameters:
+  apitoken:
+    description: Enter either your Pagertduty API token or use the CircleCI UI to add your token under the 'PAGERDUTY_APITOKEN' env var
+    type: string
+    default: ${PAGERDUTY_APITOKEN}
+
+  incident_title:
+    type: string
+    default: "$CIRCLE_JOB job has caused an incident"
+    description: Enter custom title.
+
+  incident_description:
+    type: string
+    default: ""
+    description: Enter the string describing the incident.
+
+  service:
+    type: string
+    default: ""
+    description: The incident will be created on this service.
+
+  priority:
+    type: string
+    default: ""
+    description: >
+      The priority of this incident.
+
+  urgency:
+    type: enum
+    default: "high"
+    enum: ["high", "low"]
+    description: The urgency of the incident and it can be high or low.
+
+  incident_key:
+    type: string
+    default: ""
+    description: >
+      A string which identifies the incident. Sending subsequent requests referencing the same service and
+      with the same incident_key will result in those requests being rejected if an open incident matches
+      that incident_key.
+
+  escalation_policy:
+    type: string
+    default: ""
+    description: >
+      Delegate this incident to the specified escalation policy. Cannot be specified if an assignee is given.
+
+steps:
+- run:
+    name: Provide error if curl is not installed.
+    command: |
+      which curl > curl_exists; echo $? | grep -q '1' && echo curl not installed && rm curl_exists && exit 1
+      rm curl_exists
+
+- run:
+    name: Pagerduty - Setting Failure Condition
+    command: |
+      echo 'export PAGERDUTY_BUILD_STATUS="fail"' >> $BASH_ENV
+    when: on_fail
+
+- run:
+    name: Pagerduty - Setting Success Condition
+    command: |
+      echo 'export PAGERDUTY_BUILD_STATUS="success"' >> $BASH_ENV
+    when: on_success
+
+- run:
+    name: Provide error if non-bash shell
+    command: |
+      if [ ! -x /bin/bash ]; then
+        echo Bash not installed.
+        exit 1
+      fi
+
+- run:
+    name: Pagerduty - Creating Incident Alert
+    shell: /bin/bash
+    when: always
+    command: |
+      current_branch_in_filter=false
+
+      IFS="," read -ra BRANCH_FILTERS \<<< "<< parameters.only_for_branches >>"
+
+      for i in "${BRANCH_FILTERS[@]}"; do
+        if [ "${i}" == "${CIRCLE_BRANCH}" ]; then
+          current_branch_in_filter=true
+        fi
+      done
+
+      if [ "x" == "x<< parameters.only_for_branches>>" ] || [ "$current_branch_in_filter" = true ]; then
+        # Provide error if no webhook is set and error. Otherwise continue
+        if [ -z "<< parameters.apitoken >>" ]; then
+          echo "NO PAGERDUTY API TOKEN SET"
+          echo "Please input your PAGERDUTY_APITOKEN value either in the settings for this project, or as a parameter for this orb."
+          exit 1
+        else
+          #If successful
+          if [ "PAGERDUTY_BUILD_STATUS" = "success" ]; then
+            #Skip if build is success
+            if [ << parameters.fail_only >> = true ]; then
+              echo "The job completed successfully"
+              echo '"fail_only" is set to "true". No Slack notification sent.'
+            fi
+          else
+            #If Failed
+            #            curl -X POST -H 'Content-type: application/json' \
+            #              --data "{ \
+            #                <<# parameters.channel >>
+            #                \"channel\": \"<< parameters.channel >>\", \
+            #                <</ parameters.channel >>
+            #                \"attachments\": [ \
+            #                  { \
+            #                    \"fallback\": \"<< parameters.failure_message >>\", \
+            #                    \"text\": \"<< parameters.failure_message >> $SLACK_MENTIONS\", \
+            #                    \"fields\": [ \
+            #                      <<# parameters.include_project_field >>
+            #                      { \
+            #                        \"title\": \"Project\", \
+            #                        \"value\": \"$CIRCLE_PROJECT_REPONAME\", \
+            #                        \"short\": true \
+            #                      }, \
+            #                      <</ parameters.include_project_field >>
+            #                      <<# parameters.include_job_number_field >>
+            #                      { \
+            #                        \"title\": \"Job Number\", \
+            #                        \"value\": \"$CIRCLE_BUILD_NUM\", \
+            #                        \"short\": true \
+            #                      } \
+            #                      <</ parameters.include_job_number_field >>
+            #                    ], \
+            #                    \"actions\": [ \
+            #                      <<# parameters.include_visit_job_action >>
+            #                      { \
+            #                        \"type\": \"button\", \
+            #                        \"text\": \"Visit Job\", \
+            #                        \"url\": \"$CIRCLE_BUILD_URL\" \
+            #                      } \
+            #                      <</ parameters.include_visit_job_action >>
+            #                    ], \
+            #                    \"color\": \"#ed5c5c\" \
+            #                  } \
+            #                ] \
+            #              } " << parameters.webhook >>
+            curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/vnd.pagerduty+json;version=2' --header 'From: amanjain5221@gmail.com' --header 'Authorization: Token token=FJZPCUMDoupgxr46uRG8' -d "{
+              \"incident\  ": { \
+                \"type\": \"incident\", \
+                \"title\": \"The server is on fire.\", \
+                \"service\": { \
+                  \"id\": \"PB63G5C\", \
+                  \"type\": \"service_reference\" \
+                }, \
+                #                \"priority\": { \
+                #                  \"id\": \"P53ZZH5\", \
+                #                  \"type\": \"priority_reference\" \
+                #                }, \
+                \"urgency\": \"high\", \
+                \"incident_key\": \"baf7cf21b1da41b4b0221008339ff357\", \
+                \"body\": { \
+                  \"type\": \"incident_body\", \
+                  \"details\": \"A disk is getting full on this machine. You should investigate what is causing the disk to fill, and ensure that there is an automated process in place for ensuring data is rotated (eg. logs should have logrotate around them). If data is expected to stay on this disk forever, you should start planning to scale up to a larger disk.\" \
+                }, \
+                \"escalation_policy\": { \
+                  \"id\": \"PT20YPA\", \
+                  \"type\": \"escalation_policy_reference\" \
+                } \
+              } \
+            }" 'https://api.pagerduty.com/incidents'
+            echo "Job failed. Alert sent."
+          fi
+        fi
+      else
+        echo "Current branch is not included in only_for_branches filter; no status alert will be sent"
+      fi
