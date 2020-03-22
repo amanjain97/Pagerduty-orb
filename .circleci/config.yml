@@ -16,7 +16,7 @@ jobs:
   incident-on-fail:
     executor: orb-tools/ubuntu
     steps:
-    - run: exit 1  #toggle this to force success or status for testing
+    - run: exit 0  #toggle this to force success or status for testing
     - pagerduty/notify-on-failure:
         service: "PB63G5C"
         from_account: "amanjain5221@gmail.com"
