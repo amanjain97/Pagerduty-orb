@@ -1,4 +1,4 @@
-# Slack Orb [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/amanjain97/Pagerduty-orb/master/LICENSE) [![CircleCI Community](https://img.shields.io/badge/community-CircleCI%20Discuss-343434.svg)](https://discuss.circleci.com/c/ecosystem/orbs)
+# Pagerduty Orb [![CircleCI Build Status](https://circleci.com/gh/amanjain97/Pagerduty-orb.svg?style=shield "CircleCI Build Status")](https://circleci.com/gh/amanjain97/Pagerduty-orb) [![CircleCI Orb Version](https://img.shields.io/badge/endpoint.svg?url=https://badges.circleci.io/orb/amanjain97/pagerduty)](https://circleci.com/orbs/registry/orb/amanjain97/pagerduty) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/amanjain97/Pagerduty-orb/master/LICENSE) [![CircleCI Community](https://img.shields.io/badge/community-CircleCI%20Discuss-343434.svg)](https://discuss.circleci.com/c/ecosystem/orbs)
 
 Easily integrate custom [Pagerduty](https://pagerduty.com/ "Pagerduty") notifications into your [CircleCI](https://circleci.com/ "CircleCI") projects. Create custom alert incidents for any job failure or success.
 
