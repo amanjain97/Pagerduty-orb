@@ -10,9 +10,9 @@ jobs:
     steps:
     - run: exit 1 #toggle this to force success or status for testing
     - pagerduty/notify-on-failure:
-        apitoken: ""
+        apitoken: "FJZPCUMDoupgxr46uRG8"
 
 workflows:
   test_pagerduty:
     jobs:
-      - notifytest
+      - incidenttest
