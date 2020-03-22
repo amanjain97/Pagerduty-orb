@@ -8,6 +8,11 @@ parameters:
     type: string
     default: ${PAGERDUTY_APITOKEN}
 
+  from_account:
+    description: The email address of a valid user associated with the account making the request.
+    type: string
+    default: ""
+
   incident_title:
     type: string
     default: "$CIRCLE_JOB job has caused an incident"
@@ -31,7 +36,7 @@ parameters:
 
   urgency:
     type: enum
-    default: "high"
+    default: "low"
     enum: ["high", "low"]
     description: The urgency of the incident and it can be high or low.
 
@@ -55,12 +60,6 @@ parameters:
     description: >
       If set, a comma-separated list of branches for which to send
       notifications. No spaces.
-
-  fail_only:
-    type: boolean
-    default: false
-    description: >
-      If `true`, notifications of successful jobs will not be sent.
 
 steps:
 - run:
@@ -110,29 +109,40 @@ steps:
           echo "NO PAGERDUTY API TOKEN SET"
           echo "Please input your PAGERDUTY_APITOKEN value either in the settings for this project, or as a parameter for this orb."
           exit 1
+        elif [ "x" == "x<< parameters.service >>" ]; then
+          echo "NO PAGERDUTY SERVICE IS SETUP"
+          exit 1;
+        elif [ "x" == "x<< parameters.from_account >>" ]; then
+          echo "NO PAGERDUTY FROM ACCOUNT IS SETUP"
+          exit 1;
         else
           #If successful
           if [ "PAGERDUTY_BUILD_STATUS" = "success" ]; then
             #Skip if build is success
-            if [ << parameters.fail_only >> = true ]; then
-              echo "The job completed successfully"
-              echo '"fail_only" is set to "true". No Slack notification sent.'
-            fi
+            echo "The job completed successfully"
           else
             #If Failed
-            curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/vnd.pagerduty+json;version=2' --header 'From: amanjain5221@gmail.com' --header 'Authorization: Token token=FJZPCUMDoupgxr46uRG8' -d "{ \
+            curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/vnd.pagerduty+json;version=2' --header 'From: << parameters.from_account >>' --header 'Authorization: Token token=<< parameters.apitoken >>' -d "{ \
                 \"incident\": { \
                   \"type\": \"incident\", \
-                  \"title\": \"The server is on fire.\", \
+                  \"title\": \"<< parameters.incident_title >>\", \
                   \"service\": { \
-                    \"id\": \"PB63G5C\", \
+                    \"id\": \"<< parameters.service >>\", \
                     \"type\": \"service_reference\" \
                   }, \
-                  \"urgency\": \"high\", \
-                  \"incident_key\": \"baf7cf21b1da41b4b0221008339ff357\", \
+                  \"priority\": { \
+                    \"id\": \"<< parameters.priority >>\",
+                    \"type\": \"priority_reference\" \
+                  }, \
+                  \"urgency\": \"<< parameters.urgency >>\", \
+                  \"incident_key\": \"<< parameters.incident_key >>\", \
+                  \"escalation_policy\": { \
+                    \"id\": \"<< parameters.escalation_policy >>\", \
+                    \"type\": \"escalation_policy_reference\" \
+                  }, \
                   \"body\": { \
                     \"type\": \"incident_body\", \
-                    \"details\": \"Example\" \
+                    \"details\": \"<< parameters.incident_description >>\" \
                   } \
                 } \
               } " https://api.pagerduty.com/incidents

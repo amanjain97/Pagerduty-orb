@@ -5,12 +5,12 @@ orbs:
   pagerduty: amanjain97/pagerduty@dev:alpha
 
 jobs:
-  notifytest:
+  incidenttest:
     executor: orb-tools/ubuntu
     steps:
     - run: exit 1 #toggle this to force success or status for testing
     - pagerduty/notify-on-failure:
-        apitoken: "default"
+        apitoken: ""
 
 workflows:
   test_pagerduty:
