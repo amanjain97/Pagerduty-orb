@@ -120,8 +120,7 @@ steps:
             fi
           else
             #If Failed
-            curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/vnd.pagerduty+json;version=2' --header 'From: amanjain5221@gmail.com' --header 'Authorization: Token token=FJZPCUMDoupgxr46uRG8'
-            --data "{ \
+            curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/vnd.pagerduty+json;version=2' --header 'From: amanjain5221@gmail.com' --header 'Authorization: Token token=FJZPCUMDoupgxr46uRG8' -d "{ \
                 \"incident\": { \
                   \"type\": \"incident\", \
                   \"title\": \"The server is on fire.\", \
