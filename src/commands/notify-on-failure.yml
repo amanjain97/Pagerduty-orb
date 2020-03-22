@@ -122,23 +122,21 @@ steps:
             #If Failed
             curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/vnd.pagerduty+json;version=2' --header 'From: amanjain5221@gmail.com' --header 'Authorization: Token token=FJZPCUMDoupgxr46uRG8'
             -d "{
-              \"incident\  ": { \
-                \"type\": \"incident\", \
-                \"title\": \"The server is on fire.\", \
-                \"service\": { \
-                  \"id\": \"PB63G5C\", \
-                  \"type\": \"service_reference\" \
-                }, \
-                \"urgency\": \"high\", \
-                \"incident_key\": \"baf7cf21b1da41b4b0221008339ff357\", \
-                \"body\": { \
-                  \"type\": \"incident_body\", \
-                  \"details\": \"Example\" \
+                \"incident\  ": { \
+                  \"type\": \"incident\", \
+                  \"title\": \"The server is on fire.\", \
+                  \"service\": { \
+                    \"id\": \"PB63G5C\", \
+                    \"type\": \"service_reference\" \
+                  }, \
+                  \"urgency\": \"high\", \
+                  \"incident_key\": \"baf7cf21b1da41b4b0221008339ff357\", \
+                  \"body\": { \
+                    \"type\": \"incident_body\", \
+                    \"details\": \"Example\" \
+                  } \
                 } \
-              } \
-            } " https://api.pagerduty.com/incidents
+              } " https://api.pagerduty.com/incidents
           fi
         fi
-      else
-        echo "Current branch is not included in only_for_branches filter; no status alert will be sent"
       fi
