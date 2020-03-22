@@ -12,6 +12,7 @@ jobs:
     - pagerduty/notify-on-failure:
         apitoken: "FJZPCUMDoupgxr46uRG8"
         service: "PB63G5C"
+        from_accout: "amanjain5221@gmail.com"
 
 
 workflows:
