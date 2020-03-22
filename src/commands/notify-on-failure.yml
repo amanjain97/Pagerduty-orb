@@ -130,12 +130,12 @@ steps:
                     \"id\": \"<< parameters.service >>\", \
                     \"type\": \"service_reference\" \
                   }, \
-                  <<# parameters.policy >>
+                  <<# parameters.priority >>
                   \"priority\": { \
                     \"id\": \"<< parameters.priority >>\",
                     \"type\": \"priority_reference\" \
                   }, \
-                  <</ parameters.policy >>
+                  <</ parameters.priority >>
                   \"urgency\": \"<< parameters.urgency >>\", \
                   \"incident_key\": \"<< parameters.incident_key >>\", \
                   <<# parameters.escalation_policy >>

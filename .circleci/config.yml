@@ -11,6 +11,8 @@ jobs:
     - run: exit 1 #toggle this to force success or status for testing
     - pagerduty/notify-on-failure:
         apitoken: "FJZPCUMDoupgxr46uRG8"
+        service: "PB63G5C"
+
 
 workflows:
   test_pagerduty:
