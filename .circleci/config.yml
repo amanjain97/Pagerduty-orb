@@ -36,67 +36,67 @@ workflows:
     - orb-tools/pack:
         requires: [orb-tools/lint]
 
-    - orb-tools/publish-dev:
-        orb-name: amanjain97/pagerduty
-        requires: [orb-tools/pack]
-
-    - orb-tools/trigger-integration-workflow:
-        name: trigger-integration-dev
-        cleanup-tags: true
-        requires: [orb-tools/publish-dev]
-        filters:
-          branches:
-            ignore: master
-
-    - orb-tools/trigger-integration-workflow:
-        name: trigger-integration-master
-        cleanup-tags: true
-        tag: master
-        requires: [orb-tools/publish-dev]
-        filters:
-          branches:
-            only: master
+      #    - orb-tools/publish-dev:
+      #        orb-name: amanjain97/pagerduty
+      #        requires: [orb-tools/pack]
+      #
+      #    - orb-tools/trigger-integration-workflow:
+      #        name: trigger-integration-dev
+      #        cleanup-tags: true
+      #        requires: [orb-tools/publish-dev]
+      #        filters:
+      #          branches:
+      #            ignore: master
+      #
+      #    - orb-tools/trigger-integration-workflow:
+      #        name: trigger-integration-master
+      #        cleanup-tags: true
+      #        tag: master
+      #        requires: [orb-tools/publish-dev]
+      #        filters:
+      #          branches:
+      #            only: master
 
   test_pagerduty-prod_deploy:
     jobs:
       - incident-on-success
       - incident-on-fail
       # patch, minor, or major publishing
-      - orb-tools/dev-promote-prod:
-          name: dev-promote-patch
-          context: orb-publishing
-          orb-name: amanjain97/pagerduty
-          cleanup-tags: true
-          requires: *prod-deploy_requires
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /master-patch.*/
-
-      - orb-tools/dev-promote-prod:
-          name: dev-promote-minor
-          release: minor
-          context: orb-publishing
-          orb-name: amanjain97/pagerduty
-          cleanup-tags: true
-          requires: *prod-deploy_requires
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /master-minor.*/
-
-      - orb-tools/dev-promote-prod:
-          name: dev-promote-major
-          release: major
-          context: orb-publishing
-          orb-name: amanjain97/pagerduty
-          cleanup-tags: true
-          requires: *prod-deploy_requires
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /master-major.*/
+      #      - orb-tools/dev-promote-prod:
+      #          name: dev-promote-patch
+      #          context: orb-publishing
+      #          orb-name: amanjain97/pagerduty
+      #          cleanup-tags: true
+      #          requires: *prod-deploy_requires
+      #          filters:
+      #            branches:
+      #              ignore: /.*/
+      #            tags:
+      #              only: /master-patch.*/
+      #
+      #      - orb-tools/dev-promote-prod:
+      #          name: dev-promote-minor
+      #          release: minor
+      #          context: orb-publishing
+      #          orb-name: amanjain97/pagerduty
+      #          cleanup-tags: true
+      #          requires: *prod-deploy_requires
+      #          filters:
+      #            branches:
+      #              ignore: /.*/
+      #            tags:
+      #              only: /master-minor.*/
+      #
+      #      - orb-tools/dev-promote-prod:
+      #          name: dev-promote-major
+      #          release: major
+      #          context: orb-publishing
+      #          orb-name: amanjain97/pagerduty
+      #          cleanup-tags: true
+      #          requires: *prod-deploy_requires
+      #          filters:
+      #            branches:
+      #              ignore: /.*/
+      #            tags:
+      #              only: /master-major.*/
 
