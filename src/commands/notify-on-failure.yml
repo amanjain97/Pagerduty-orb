@@ -128,10 +128,6 @@ steps:
                   \"id\": \"PB63G5C\", \
                   \"type\": \"service_reference\" \
                 }, \
-                #                \"priority\": { \
-                #                  \"id\": \"P53ZZH5\", \
-                #                  \"type\": \"priority_reference\" \
-                #                }, \
                 \"urgency\": \"high\", \
                 \"incident_key\": \"baf7cf21b1da41b4b0221008339ff357\", \
                 \"body\": { \
@@ -139,8 +135,7 @@ steps:
                   \"details\": \"Example\" \
                 } \
               } \
-            }" 'https://api.pagerduty.com/incidents'
-            echo "Job failed. Alert sent."
+            }" "https://api.pagerduty.com/incidents"
           fi
         fi
       else
