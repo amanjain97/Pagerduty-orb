@@ -72,3 +72,6 @@ We welcome [issues](https://github.com/amanjain97/Pagerduty-orb/issues) to and [
 
 ## License
 This project is licensed under the MIT License - read [LICENSE](LICENSE) file for details.
+
+## Star and watch 
+Watch this repository for updates and please give a star if you are using it or find it useful.
