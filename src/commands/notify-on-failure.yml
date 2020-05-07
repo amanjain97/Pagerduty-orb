@@ -122,7 +122,7 @@ steps:
             echo "The job completed successfully"
           else
             #If Failed
-            curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/vnd.pagerduty+json;version=2' --header 'From: << parameters.from_account >>' --header 'Authorization: Token token=<< parameters.apitoken >>' -d "{ \
+            curl -X POST --header "Content-Type: application/json" --header "Accept: application/vnd.pagerduty+json;version=2" --header "From: << parameters.from_account >>" --header "Authorization: Token token=<< parameters.apitoken >>" -d "{ \
                 \"incident\": { \
                   \"type\": \"incident\", \
                   \"title\": \"<< parameters.incident_title >>\", \
