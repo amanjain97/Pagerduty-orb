@@ -117,7 +117,7 @@ steps:
           exit 1;
         else
           #If successful
-          if [ "PAGERDUTY_BUILD_STATUS" = "success" ]; then
+          if [ "$PAGERDUTY_BUILD_STATUS" = "success" ]; then
             #Skip if build is success
             echo "The job completed successfully"
           else
